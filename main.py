@@ -77,6 +77,8 @@ def main_menu():
             return choice
 
 def show_account(acc):
+    print()
+    print('-' * 30)
     print("IBAN:", acc['IBAN'])
     print("Balance:", acc['balance'], currency['symbol'])
     print("Currency:", currency['name'], f"({currency['code']})")
@@ -86,6 +88,8 @@ def show_transactions(tax_id):
     found = False
     for t in transactions:
         if t['tax_id'] == tax_id:
+            print()
+            print("-" * 30)
             print("IBAN:", t['IBAN'])
             print("Amount:", t['amount'])
             print("Date:", t['date'])
@@ -96,6 +100,7 @@ def show_transactions(tax_id):
 
 def deposit(acc):
     print("== DEPOSIT ==")
+    print()
     amount = input("Enter deposit amount: ")
     if amount.replace('.', '', 1).isdigit() and float(amount) > 0:
         amount = float(amount)
@@ -106,12 +111,14 @@ def deposit(acc):
             'amount': f"{amount} EUR",
             'date': get_date()
         })
+        print()
         print("Deposit successful.")
     else:
         print("Invalid amount.")
 
 def withdraw(acc):
     print("== WITHDRAWAL ==")
+    print()
     amount = input("Enter withdrawal amount: ")
     if amount.replace('.', '', 1).isdigit() and float(amount) > 0:
         amount = float(amount)
@@ -125,6 +132,7 @@ def withdraw(acc):
                 'amount': f"-{amount} EUR",
                 'date': get_date()
             })
+            print()
             print("Withdrawal successful.")
     else:
         print("Invalid amount.")
@@ -132,10 +140,17 @@ def withdraw(acc):
 def owner_info(acc):
     for c in companies:
         if c['tax_id'] == acc['tax_id']:
+            print()
+            print('-' * 30)
             print("Name:", c['name'])
             print("Tax ID:", c['tax_id'])
             print("Email:", c['email'])
-            print("Address:", c['hq']['street'], c['hq']['postal_code'], c['hq']['city'], c['hq']['country'])
+            print("Streat:", c['hq']['street']),
+            print('Postal code:', c['hq']['postal_code']),
+            print('City:', c['hq']['city']), 
+            print('Country:', c['hq']['country'])
+            print('-' * 30)
+            print()
             return
     print("No owner data found.")
 
