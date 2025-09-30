@@ -217,38 +217,40 @@ def bank_transactions():
 
         menu_items = input('Ennter a number of functionality you want: ')
 
-        if menu_items.isdigit():
-            return int(menu_items)
-        else: 
+        if not menu_items.isdigit():
             print('Invalid entry! Please try again. ')
             input('To make a new selection, press the ENTER key.')
+            continue
 
-            if menu_items == 0:
-                print()
-                return main_menu()
-            elif menu_items == 1:
-                print()
-                clear_display()
-                display_account_info()
-            elif menu_items == 2:
-                print()
-                clear_display()
-                view_all_transactions()
-            elif menu_items == 3:
-                print()
-                clear_display()
-                deposit_money()
-            elif menu_items == 4:
-                print()
-                clear_display()
-                withdraw_money()
-            elif menu_items == 5:
-                print()
-                clear_display()
-                account_owner_info()
-            else:
-                print('Invalid entry! Please try again. ')
-                input('To make a new selection, press the ENTER key.')
+        menu_items = int(menu_items)
+
+        if menu_items == 0:
+            print()
+            return  # Exit to previous menu or main menu
+
+        elif menu_items == 1:
+            print()
+            display_account_info()
+
+        elif menu_items == 2:
+            print()
+            view_all_transactions()
+
+        elif menu_items == 3:
+            print()
+            deposit_money()
+
+        elif menu_items == 4:
+            print()
+            withdraw_money()
+
+        elif menu_items == 5:
+            print()
+            account_owner_info()
+
+        else:
+            print('Invalid entry! Please try again. ')
+            input('To make a new selection, press the ENTER key.')
 
 
 
@@ -351,12 +353,11 @@ def existing_account():
 
 #region KEY FUNCTIONS
 def main():
-    while True:
         menu_item = main_menu()
 
         if menu_item == 0:
             print()
-            break
+            return
         
         elif menu_item == 1:
             opening_an_account()
