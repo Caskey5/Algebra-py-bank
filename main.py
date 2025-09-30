@@ -92,15 +92,113 @@ def generate_iban():
     return iban
 
 def display_account_info():
-    pass
+    clear_display()
+    print("== Account Information ==")
+    for acc in bank_account:
+        print(f"IBAN: {acc['IBAN']}")
+        print(f"Balance: {acc['balance']} {acc['currency']['symbol']}")
+        print(f"Currency: {acc['currency']['name']} ({acc['currency']['code']})")
+        print("-" * 30)
+    input("Press ENTER to return to menu.")
+
 def view_all_transactions():
-    pass
+    clear_display()
+    print("== All Transactions ==")
+    if not transactions:
+        print("No transactions found.")
+    else:
+        for t in transactions:
+            print(f"Company: {t['company']}")
+            print(f"IBAN: {t['IBAN']}")
+            print(f"Amount: {t['amount']}")
+            print(f"Date: {t['date']}")
+            print("-" * 30)
+    input("Press ENTER to return to menu.")
+
 def deposit_money():
-    pass
+    clear_display()
+    print("== Deposit Money ==")
+    iban = input("Enter your IBAN: ")
+    found = False
+    for acc in bank_account:
+        if acc['IBAN'] == iban:
+            found = True
+            try:
+                amount = float(input("Enter amount to deposit: "))
+                if amount <= 0:
+                    print("Amount must be positive.")
+                else:
+                    acc['balance'] += amount
+                    transaction_entry = {
+                        'company': next((c['name'] for c in company if c['tax_id'] == acc['tax_id']), "Unknown"),
+                        'IBAN': iban,
+                        'amount': f"{amount} EUR",
+                        'date': get_current_date()
+                    }
+                    transactions.append(transaction_entry)
+                    print(f"Deposited {amount} EUR to account {iban}.")
+            except ValueError:
+                print("Invalid amount.")
+            break
+    if not found:
+        print("Account not found.")
+    input("Press ENTER to return to menu.")
+
 def withdraw_money():
-    pass
+    clear_display()
+    print("== Withdraw Money ==")
+    iban = input("Enter your IBAN: ")
+    found = False
+    for acc in bank_account:
+        if acc['IBAN'] == iban:
+            found = True
+            try:
+                amount = float(input("Enter amount to withdraw: "))
+                if amount <= 0:
+                    print("Amount must be positive.")
+                elif amount > acc['balance']:
+                    print("Insufficient funds.")
+                else:
+                    acc['balance'] -= amount
+                    transaction_entry = {
+                        'company': next((c['name'] for c in company if c['tax_id'] == acc['tax_id']), "Unknown"),
+                        'IBAN': iban,
+                        'amount': f"-{amount} EUR",
+                        'date': get_current_date()
+                    }
+                    transactions.append(transaction_entry)
+                    print(f"Withdrew {amount} EUR from account {iban}.")
+            except ValueError:
+                print("Invalid amount.")
+            break
+    if not found:
+        print("Account not found.")
+    input("Press ENTER to return to menu.")
+
 def account_owner_info():
-    pass
+    clear_display()
+    print("== Account Owner Information ==")
+    iban = input("Enter your IBAN: ")
+    found = False
+    for acc in bank_account:
+        if acc['IBAN'] == iban:
+            found = True
+            owner = next((c for c in company if c['tax_id'] == acc['tax_id']), None)
+            if owner:
+                print(f"Company Name: {owner['name']}")
+                print(f"Tax ID: {owner['tax_id']}")
+                print(f"Email: {owner['email']}")
+                print("Address:")
+                print(f"  Street: {owner['hq']['street']}")
+                print(f"  Postal Code: {owner['hq']['postal_code']}")
+                print(f"  City: {owner['hq']['city']}")
+                print(f"  Country: {owner['hq']['country']}")
+            else:
+                print("Owner information not found.")
+            break
+    if not found:
+        print("Account not found.")
+    input("Press ENTER to return to menu.")
 
 def bank_transactions():
     print('bank_transactions() is working!')
@@ -130,19 +228,28 @@ def bank_transactions():
                 return main_menu()
             elif menu_items == 1:
                 print()
+                clear_display()
                 display_account_info()
             elif menu_items == 2:
                 print()
+                clear_display()
                 view_all_transactions()
             elif menu_items == 3:
                 print()
+                clear_display()
                 deposit_money()
             elif menu_items == 4:
                 print()
+                clear_display()
                 withdraw_money()
             elif menu_items == 5:
                 print()
+                clear_display()
                 account_owner_info()
+            else:
+                print('Invalid entry! Please try again. ')
+                input('To make a new selection, press the ENTER key.')
+
 
 
 
@@ -250,12 +357,10 @@ def main():
         if menu_item == 0:
             print()
             break
-
-            
+        
         elif menu_item == 1:
             opening_an_account()
             print()
-
 
         elif menu_item == 2:
             existing_account()
