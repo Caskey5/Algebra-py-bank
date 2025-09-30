@@ -1,11 +1,13 @@
 #region IMPORTS
 import os
+import time
 
 #endregion
 
 
 #region INIT DATA
-company = {
+company = [
+    {
     'id': 1,
     'name': 'ABC Software d.o.o.',
     'tax_id': '01234567890',
@@ -16,7 +18,8 @@ company = {
         'country': 'Hrvatska'
     },
     'email': 'info@abc-software.hr'
-}
+    }
+]
 
 bank = {
     'id': 1,
@@ -38,7 +41,8 @@ currency = {
 
 transactions = []
 
-bank_account = {
+bank_account = [
+    {
     'id': 1,
     'IBAN': 'HR45875465481354654',
     'balance': 0.00,
@@ -46,8 +50,8 @@ bank_account = {
     'bank': bank,
     'currency': currency,
     'transactions': transactions
-}
-
+    }
+]
 #endregion
 
 
@@ -77,7 +81,42 @@ def main_menu():
 
 #region FUNCTIONS
 def opening_an_account():
-    pass
+    clear_display()
+    while True:
+        print()
+        new_name = input('Enter a company name: ')
+        new_tax_id = input('Enter a tax id : ')
+        new_email = input('Enter a email: ')
+        new_street = input('Enter a street: ')
+        new_postal_code = input('Enter a postal code: ')
+        new_city = input('Enter a city: ')
+        new_country = input('Enter a country: ')
+
+        new_company = {
+            'id': company[-1]['id'] + 1,
+            'name': new_name,
+            'tax_id': new_tax_id,
+            'hq': {
+                'street': new_street,
+                'postal_code': new_postal_code,
+                'city': new_city,
+                'country': new_country
+            },
+            'email': new_email
+}
+        
+        company.append(new_company)
+        clear_display()
+        print()
+        print('You opened a bank account!')
+        print()
+        print('In menu select option 2 for managing your account!')
+        time.sleep(5)
+        break
+
+    clear_display()
+    main_menu()
+
 def existing_account():
     pass
 #endregion
@@ -93,11 +132,10 @@ def main():
     elif menu_item == 1:
         opening_an_account()
         print()
-        input('Press ENTER to continue!')
+
     elif menu_item == 2:
         existing_account()
         print()
-        input('Press ENTER to continue!')
     else:
         print(menu_item)
         input()
